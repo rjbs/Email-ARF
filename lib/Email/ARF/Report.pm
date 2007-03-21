@@ -1,7 +1,7 @@
-package Email::ARF::Report;
-
 use strict;
 use warnings;
+
+package Email::ARF::Report;
 
 use Carp ();
 use Email::MIME 1.859 ();
@@ -23,6 +23,12 @@ Email::ARF::Report - interpret Abuse Reporting Format (ARF) messages
 
 =head2 new
 
+  my $report = Email::ARF::Report->new($message);
+
+Given either an Email::MIME object or a string containing the text of an email
+message, this method returns a new Email::ARF::Report object.  If the given
+message source is not a valid report in ARF format, an exception is raised.
+
 =cut
 
 sub new {
@@ -30,7 +36,9 @@ sub new {
 
   Carp::croak "no report source provided" unless $source;
 
-  my $mime = blessed $source ? $source : Email::MIME->new($source);
+  my $mime = Scalar::Util::blessed $source
+           ? $source
+           : Email::MIME->new($source);
 
   Carp::croak "ARF report source could not be interpreted as MIME message"
     unless eval { $mime->isa('Email::MIME') };
@@ -45,7 +53,7 @@ sub new {
 
   Carp::croak "too few subparts for ARF report" unless $mime->subparts >= 3;
 
-  my ($description_part, $report_part, $original_email) = $mime->subparts;
+  my ($description_part, $report_part, $original_part) = $mime->subparts;
 
   my $report_header = $report_part->content_type;
   my $report_ct = Email::MIME::ContentType::parse_content_type($report_header);
@@ -56,34 +64,49 @@ sub new {
   my $self = bless {
     description_part => $description_part,
     report_part      => $report_part,
-    original_email   => $original_email,
+    original_part    => $original_part,
   } => $class;
 
-  $self->_acquire_fields;
+  $self->{fields} = $self->_email_from_body($report_part)->header_obj;
+  $self->{original_email} = $self->_email_from_body($original_part);
 
   return $self;
 }
 
-sub _acquire_fields {
-  my ($self) = @_;
+sub _email_from_body {
+  my ($self, $src_email) = @_;
   
-  my $report_body = $self->_report_part->body;
+  my $src_email_body = $src_email->body;
 
-  $report_body =~ s/\A(\x0d|\x0a)+//g;
+  $src_email_body =~ s/\A(\x0d|\x0a)+//g;
 
-  # This should be a header object, when the interface to that is more
-  # stabilized.
-  my $fields = Email::Simple->new($report_body);
-
-  $self->{fields} = $fields;
+  my $email = Email::Simple->new($src_email_body);
 }
 
+=head2 original_email
+
+This method returns an Email::Simple object containing the original message to
+which the report refers.  Bear in mind that this message may have been edited
+by the reporter to remove identifying information.
+
+=cut
+
+sub original_email {
+  $_[0]->{original_email}
+}
+
+=head2 description
+
+=cut
+
 sub _description_part { $_[0]->{description_part} }
-sub _report_part      { $_[0]->{report_part}      }
-sub original_email    { $_[0]->{original_email}   }
 
 sub description {
   $_[0]->_description_part->body;
+}
+
+sub _report_part {
+  $_[0]->{report_part}
 }
 
 sub _fields { $_[0]->{fields} }
@@ -94,9 +117,9 @@ sub field {
   return $self->_fields->header($field);
 }
 
-sub feedback_type  { $_[0]->field('Feedback-Type'); }
-sub user_agent     { $_[0]->field('User-Agent');    }
-sub report_version { $_[0]->field('Version');       }
+sub feedback_type { $_[0]->field('Feedback-Type'); }
+sub user_agent    { $_[0]->field('User-Agent');    }
+sub arf_version   { $_[0]->field('Version');       }
 
 =head1 SEE ALSO
 
