@@ -7,6 +7,6 @@ Email::ARF - abuse report format (placeholder module)
 
 =cut
 
-die "This module does nothing."
+warn "This module does nothing." unless $ENV{HARNESS_ACTIVE};
 
 1;
