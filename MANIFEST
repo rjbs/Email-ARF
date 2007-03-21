@@ -1,0 +1,23 @@
+Changes
+inc/Module/Install.pm
+inc/Module/Install/Base.pm
+inc/Module/Install/Can.pm
+inc/Module/Install/Fetch.pm
+inc/Module/Install/Makefile.pm
+inc/Module/Install/Metadata.pm
+inc/Module/Install/Win32.pm
+inc/Module/Install/WriteAll.pm
+lib/Email/ARF.pm
+lib/Email/ARF/Report.pm
+LICENSE
+Makefile.PL
+MANIFEST			This list of files
+META.yml
+README
+t/basic.t
+t/create.t
+t/messages/example-0.msg
+t/messages/example-1.msg
+t/messages/example-2.msg
+t/pod-coverage.t
+t/pod.t
