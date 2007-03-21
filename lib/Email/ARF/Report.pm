@@ -15,18 +15,18 @@ Email::ARF::Report - interpret Abuse Reporting Format (ARF) messages
 
 =head1 VERSION
 
-version 0.000
+version 0.001
 
   $Id$
 
-B<Achtung!>  Yes, version 0.000.  This is a prototype.  This module will
+B<Achtung!>  Yes, version 0.001.  This is a prototype.  This module will
 definitely continue to exist, but maybe the interface will change radically
 once more people have seen it and tried to use it.  Don't rely on its interface
 to keep you employed, just yet.
 
 =cut
 
-our $VERSION = '0.000';
+our $VERSION = '0.001';
 
 =head1 SYNOPSIS
 
@@ -96,6 +96,77 @@ sub _email_from_body {
   $src_email_body =~ s/\A(\x0d|\x0a)+//g;
 
   my $email = Email::Simple->new($src_email_body);
+}
+
+=head2 create
+
+  my $mail = Email::ARF::Report->create(
+    original_email => $email,
+    description    => $description,
+    fields         => \%fields,      # or \@fields
+  );
+
+This method creates a new ARF report from scratch, returning it as an
+Email::MIME message.
+
+=cut
+
+sub create {
+  my ($class, %arg) = @_;
+
+  require Email::MIME::Creator;
+
+  my $description_part = Email::MIME->create(
+    attributes => { content_type => 'text/plain' },
+    body       => $arg{description},
+  );
+
+  $description_part->header_set('Date');
+
+  my $original_part = Email::MIME->create(
+    attributes => { content_type => 'message/rfc822' },
+    body       => $arg{original_email}->as_string,
+  );
+
+  $original_part->header_set('Date');
+
+  my $field_pairs = ref $arg{fields} eq 'HASH'
+                  ? [ %{ $arg{fields} } ]
+                  : $arg{fields};
+
+  my $fields = Email::Simple->create(header => $field_pairs);
+
+  $fields->header_set('Date');
+
+  unless (defined $fields->header('user-agent')) {
+    $fields->header_set('User-Agent', "$class/" . $class->VERSION);
+  }
+
+  unless (defined $fields->header('version')) {
+    $fields->header_set('Version', "0.1");
+  }
+
+  unless (defined $fields->header('Feedback-Type')) {
+    $fields->header_set('Feedback-Type', "other");
+  }
+
+  my $report_part = Email::MIME->create(
+    attributes => { content_type => 'message/feedback-report' },
+    body       => $fields->header_obj->as_string,
+  );
+
+  $report_part->header_set('Date');
+
+  my $report = Email::MIME->create(
+    attributes => {
+      content_type  => 'multipart/report',
+      'report-type' => 'feedback-report',
+    },
+    header => $arg{header} || [],
+    parts  => [ $description_part, $report_part, $original_part ],
+  );
+
+  return $report;
 }
 
 =head2 original_email

@@ -15,6 +15,7 @@ MANIFEST			This list of files
 META.yml
 README
 t/basic.t
+t/create.t
 t/messages/example-0.msg
 t/messages/example-1.msg
 t/messages/example-2.msg
