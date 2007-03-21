@@ -13,6 +13,21 @@ use Params::Util qw(_INSTANCE);
 
 Email::ARF::Report - interpret Abuse Reporting Format (ARF) messages
 
+=head1 VERSION
+
+version 0.000
+
+  $Id$
+
+B<Achtung!>  Yes, version 0.000.  This is a prototype.  This module will
+definitely continue to exist, but maybe the interface will change radically
+once more people have seen it and tried to use it.  Don't rely on its interface
+to keep you employed, just yet.
+
+=cut
+
+our $VERSION = '0.000';
+
 =head1 SYNOPSIS
 
   my $report = Email::ARF::Report->new($text);
@@ -97,6 +112,9 @@ sub original_email {
 
 =head2 description
 
+This method returns the human-readable description of the report, taken from
+the body of the human-readable (first) subpart of the report.
+
 =cut
 
 sub _description_part { $_[0]->{description_part} }
@@ -111,11 +129,34 @@ sub _report_part {
 
 sub _fields { $_[0]->{fields} }
 
+=head2 field
+
+  my $value  = $report->field($field_name);
+  my @values = $report->field($field_name);
+
+This method returns the value for the given field from the second,
+machine-readable part of the report.  In scalar context, it returns the first
+value for the field.
+
+=cut
+
 sub field {
   my ($self, $field) = @_;
 
   return $self->_fields->header($field);
 }
+
+=head2 feedback_type
+
+=head2 user_agent
+
+=head2 arf_version
+
+These methods are shorthand for retrieving the fields of the same name, except
+for C<arf_version>, which returns the F<Version> header.  It has been renamed
+to avoid confusion with the universal C<VERSION> method.
+
+=cut
 
 sub feedback_type { $_[0]->field('Feedback-Type'); }
 sub user_agent    { $_[0]->field('User-Agent');    }
