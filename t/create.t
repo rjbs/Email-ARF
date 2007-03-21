@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 BEGIN { use_ok('Email::ARF::Report'); }
 
@@ -24,4 +24,5 @@ my $report_mail = Email::ARF::Report->create(
   original_email => $email,
 );
 
-warn $report_mail->as_string;
+eval { my $report = Email::ARF::Report->new($report_mail); };
+is($@, '', "the created report also can be interpreted as ARF");
