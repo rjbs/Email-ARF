@@ -1,3 +1,5 @@
+use strict;
+use warnings;
 
 package Email::ARF;
 
@@ -7,13 +9,13 @@ Email::ARF - abuse report format (placeholder module)
 
 =head1 VERSION
 
-version 0.000
+version 0.002
 
   $Id$
 
 =cut
 
-our $VERSION = '0.000';
+our $VERSION = '0.002';
 
 warn "This module does nothing." unless $ENV{HARNESS_ACTIVE};
 

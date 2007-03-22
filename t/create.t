@@ -17,12 +17,11 @@ my $email = Email::Simple->create(
   body   => "Our math tests are so hard, you'll cube yourself!",
 );
 
-my $report_mail = Email::ARF::Report->create(
+my $report = Email::ARF::Report->create(
   description    => "Please do not send math tests to our customers!",
   fields         => { 'Source-IP' => '127.0.0.127' },
   header         => [ Subject => 'Math Abuse Report' ],
   original_email => $email,
 );
 
-eval { my $report = Email::ARF::Report->new($report_mail); };
-is($@, '', "the created report also can be interpreted as ARF");
+is($report->field('Source-IP'), '127.0.0.127', 'field we passed in is there');

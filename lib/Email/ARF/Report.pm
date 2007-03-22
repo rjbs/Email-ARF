@@ -15,18 +15,18 @@ Email::ARF::Report - interpret Abuse Reporting Format (ARF) messages
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
   $Id$
 
-B<Achtung!>  Yes, version 0.001.  This is a prototype.  This module will
+B<Achtung!>  Yes, version 0.002.  This is a prototype.  This module will
 definitely continue to exist, but maybe the interface will change radically
 once more people have seen it and tried to use it.  Don't rely on its interface
 to keep you employed, just yet.
 
 =cut
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 =head1 SYNOPSIS
 
@@ -77,6 +77,7 @@ sub new {
     and    $report_ct->{composite} eq 'feedback-report';
 
   my $self = bless {
+    mime             => $mime,
     description_part => $description_part,
     report_part      => $report_part,
     original_part    => $original_part,
@@ -106,8 +107,7 @@ sub _email_from_body {
     fields         => \%fields,      # or \@fields
   );
 
-This method creates a new ARF report from scratch, returning it as an
-Email::MIME message.
+This method creates a new ARF report from scratch.
 
 =cut
 
@@ -167,8 +167,19 @@ sub create {
     parts  => [ $description_part, $report_part, $original_part ],
   );
 
-  return $report;
+  $class->new($report);
 }
+
+=head2 as_email
+
+This method returns an Email::MIME object representing the report.
+
+B<Warning!>  Email::MIME objects are mutable.  At present, changing this object
+will B<not> change the rest of the ARF report object.
+
+=cut
+
+sub as_email { $_[0]->{mime} }
 
 =head2 original_email
 
