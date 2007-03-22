@@ -1,0 +1,3 @@
+
+Email::ARF::Report represents the contents of a email feedback report in Abuse
+Report Format.
