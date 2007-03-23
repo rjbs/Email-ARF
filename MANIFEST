@@ -16,8 +16,8 @@ META.yml
 README
 t/basic.t
 t/create.t
-t/messages/example-0.msg
-t/messages/example-1.msg
-t/messages/example-2.msg
+t/messages/example0.msg
+t/messages/example1.msg
+t/messages/example2.msg
 t/pod-coverage.t
 t/pod.t

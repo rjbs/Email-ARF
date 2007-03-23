@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 2;
+use Test::More tests => 7;
 
 BEGIN { use_ok('Email::ARF::Report'); }
 
@@ -17,11 +17,27 @@ my $email = Email::Simple->create(
   body   => "Our math tests are so hard, you'll cube yourself!",
 );
 
-my $report = Email::ARF::Report->create(
-  description    => "Please do not send math tests to our customers!",
-  fields         => { 'Source-IP' => '127.0.0.127' },
-  header         => [ Subject => 'Math Abuse Report' ],
-  original_email => $email,
+my $string = $email->as_string;
+
+my @sources = (
+  string  => $string,
+  str_ref => \$string,
+  object  => $email,
 );
 
-is($report->field('Source-IP'), '127.0.0.127', 'field we passed in is there');
+while (my ($desc, $source) = splice @sources, 0, 2) {
+  my $report = Email::ARF::Report->create(
+    description    => "Please do not send math tests to our customers!",
+    fields         => { 'Source-IP' => '127.0.0.127' },
+    header         => [ Subject => 'Math Abuse Report' ],
+    original_email => $source,
+  );
+  
+  isa_ok($report, 'Email::ARF::Report', "object from $desc");
+
+  is(
+    $report->field('Source-IP'),
+    '127.0.0.127',
+    "$desc: field we passed in is there"
+  );
+}
