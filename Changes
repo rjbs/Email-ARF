@@ -1,0 +1,12 @@
+Revision history for Email::ARF::Report
+
+0.003     2007-03-22
+          improve create method and the report/message dichotomy
+          improve documentation
+          improve tests
+
+0.001     2007-03-21
+          add a lousy first-pass at create method
+
+0.000     2007-03-20
+          initial, totally experimental release
