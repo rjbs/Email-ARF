@@ -90,7 +90,6 @@ sub new {
   my $self = bless {
     mime             => $mime,
     description_part => $description_part,
-    report_part      => $report_part,
     original_part    => $original_part,
   } => $class;
 
@@ -242,10 +241,6 @@ sub _description_part { $_[0]->{description_part} }
 
 sub description {
   $_[0]->_description_part->body;
-}
-
-sub _report_part {
-  $_[0]->{report_part}
 }
 
 sub _fields { $_[0]->{fields} }
