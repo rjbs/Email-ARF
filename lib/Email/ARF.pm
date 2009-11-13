@@ -7,6 +7,10 @@ package Email::ARF;
 
 Email::ARF - abuse report format (placeholder module)
 
+=head1 REFERENCES
+
+You probably wanted to be looking at L<Email::ARF::Report>.
+
 =head1 VERSION
 
 version 0.003
