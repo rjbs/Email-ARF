@@ -1,5 +1,8 @@
 Revision history for Email::ARF::Report
 
+0.003     2009-11-20
+          tweak docs and prereqs (thanks, mstevens @ github)
+
 0.003     2007-03-22
           improve create method and the report/message dichotomy
           improve documentation
