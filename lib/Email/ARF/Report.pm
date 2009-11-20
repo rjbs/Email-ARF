@@ -15,18 +15,18 @@ Email::ARF::Report - interpret Abuse Reporting Format (ARF) messages
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
   $Id$
 
-B<Achtung!>  Yes, version 0.003.  This is a prototype.  This module will
+B<Achtung!>  Yes, version 0.004.  This is a prototype.  This module will
 definitely continue to exist, but maybe the interface will change radically
 once more people have seen it and tried to use it.  Don't rely on its interface
 to keep you employed, just yet.
 
 =cut
 
-our $VERSION = '0.003';
+our $VERSION = '0.004';
 
 =head1 SYNOPSIS
 

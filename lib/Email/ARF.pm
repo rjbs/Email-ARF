@@ -13,13 +13,13 @@ You probably wanted to be looking at L<Email::ARF::Report>.
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
   $Id$
 
 =cut
 
-our $VERSION = '0.003';
+our $VERSION = '0.004';
 
 warn "This module does nothing." unless $ENV{HARNESS_ACTIVE};
 
