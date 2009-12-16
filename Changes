@@ -1,6 +1,10 @@
 Revision history for Email::ARF::Report
 
-0.003     2009-11-20
+0.005     2009-12-16
+          the original message part is now returned as a MIME instead of Simple
+          email object
+
+0.004     2009-11-20
           tweak docs and prereqs (thanks, mstevens @ github)
 
 0.003     2007-03-22
