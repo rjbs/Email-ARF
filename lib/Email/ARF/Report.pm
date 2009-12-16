@@ -106,7 +106,7 @@ sub _email_from_body {
 
   $src_email_body =~ s/\A(\x0d|\x0a)+//g;
 
-  my $email = Email::Simple->new($src_email_body);
+  my $email = Email::MIME->new($src_email_body);
 }
 
 =head2 create
