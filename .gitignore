@@ -1,4 +1,2 @@
-blib/
-inc/
-pm_to_blib
-META.yml
+.build
+Email-ARF-*

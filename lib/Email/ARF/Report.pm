@@ -1,30 +1,24 @@
 use strict;
 use warnings;
-
 package Email::ARF::Report;
+# ABSTRACT: interpret Abuse Reporting Format (ARF) messages
 
 use Carp ();
-use Email::MIME 1.859 ();
+use Email::MIME 1.900 (); # ->subtypes
 use Email::MIME::ContentType ();
 use Scalar::Util ();
 use Params::Util qw(_INSTANCE);
 
-=head1 NAME
+=begin :prelude
 
-Email::ARF::Report - interpret Abuse Reporting Format (ARF) messages
-
-=head1 VERSION
-
-version 0.005
+=head1 WARNING
 
 B<Achtung!>  Yes, version 0.005.  This is a prototype.  This module will
 definitely continue to exist, but maybe the interface will change radically
 once more people have seen it and tried to use it.  Don't rely on its interface
 to keep you employed, just yet.
 
-=cut
-
-our $VERSION = '0.005';
+=end :prelude
 
 =head1 SYNOPSIS
 
@@ -43,9 +37,7 @@ to an email provider.  It includes mechanisms for providing machine-readable
 details about the incident, a human-readable description, and a copy of the
 offending message.
 
-=head1 METHODS
-
-=head3 new
+=method new
 
   my $report = Email::ARF::Report->new($message);
 
@@ -99,7 +91,7 @@ sub new {
 
 sub _email_from_body {
   my ($self, $src_email) = @_;
-  
+
   my $src_email_body = $src_email->body;
 
   $src_email_body =~ s/\A(\x0d|\x0a)+//g;
@@ -107,7 +99,7 @@ sub _email_from_body {
   my $email = Email::MIME->new($src_email_body);
 }
 
-=head2 create
+=method create
 
   my $mail = Email::ARF::Report->create(
     original_email => $email,
@@ -193,7 +185,7 @@ sub create {
   $class->new($report);
 }
 
-=head2 as_email
+=method as_email
 
 This method returns an Email::MIME object representing the report.
 
@@ -208,7 +200,7 @@ sub as_email {
   return Email::MIME->new($_[0]->as_string)
 }
 
-=head2 as_string
+=method as_string
 
 This method returns a string representation of the report.
 
@@ -216,7 +208,7 @@ This method returns a string representation of the report.
 
 sub as_string { $_[0]->{mime}->as_string }
 
-=head2 original_email
+=method original_email
 
 This method returns an Email::Simple object containing the original message to
 which the report refers.  Bear in mind that this message may have been edited
@@ -228,7 +220,7 @@ sub original_email {
   $_[0]->{original_email}
 }
 
-=head2 description
+=method description
 
 This method returns the human-readable description of the report, taken from
 the body of the human-readable (first) subpart of the report.
@@ -243,7 +235,7 @@ sub description {
 
 sub _fields { $_[0]->{fields} }
 
-=head2 field
+=method field
 
   my $value  = $report->field($field_name);
   my @values = $report->field($field_name);
@@ -262,9 +254,9 @@ sub field {
 
 =head2 feedback_type
 
-=head2 user_agent
+=method user_agent
 
-=head2 arf_version
+=method arf_version
 
 These methods are shorthand for retrieving the fields of the same name, except
 for C<arf_version>, which returns the F<Version> header.  It has been renamed
@@ -287,17 +279,6 @@ L<http://www.shaftek.org/publications/drafts/abuse-report/draft-shafranovich-fee
 This module is maintained by the Perl Email Project
 
 L<http://emailproject.perl.org/wiki/Email::ARF::Report>
-
-=head1 AUTHORS
-
-Ricardo SIGNES E<lt>F<rjbs@cpan.org>E<gt>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright 2007 by Ricardo SIGNES
-
-This library is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself.
 
 =cut
 
