@@ -161,7 +161,10 @@ sub create {
   $fields->header_set('Date');
 
   unless (defined $fields->header('user-agent')) {
-    $fields->header_set('User-Agent', "$class/" . $class->VERSION);
+    $fields->header_set(
+      'User-Agent',
+      "$class/" . ($class->VERSION || '(dev)')
+    );
   }
 
   unless (defined $fields->header('version')) {
