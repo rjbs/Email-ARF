@@ -13,10 +13,10 @@ use Params::Util qw(_INSTANCE);
 
 =head1 WARNING
 
-B<Achtung!>  Yes, version 0.005.  This is a prototype.  This module will
-definitely continue to exist, but maybe the interface will change radically
-once more people have seen it and tried to use it.  Don't rely on its interface
-to keep you employed, just yet.
+B<Achtung!>  This is a prototype.  This module will definitely continue to
+exist, but maybe the interface will change radically once more people have seen
+it and tried to use it.  Don't rely on its interface to keep you employed, just
+yet.
 
 =end :prelude
 
@@ -105,12 +105,19 @@ sub _email_from_body {
     original_email => $email,
     description    => $description,
     fields         => \%fields,      # or \@fields
+    header_str     => \@headers,
   );
 
 This method creates a new ARF report from scratch.
 
 The C<original_email> parameter may be given as a string, a string reference,
 or as an object that provides an C<as_string> method.
+
+The optional C<header_str> parameter is an arrayref of name/value pairs to be
+added as extra headers in the ARF report.  The values are expected to be
+character strings, and will be MIME-encoded as needed.  To pass pre-encoded
+headers, use the C<header> parameter.  These are handled by L<Email::MIME>'s
+C<create> constructor.
 
 Default values are provided for the following fields:
 
@@ -178,8 +185,10 @@ sub create {
       # attributes are heeded, here.  The rest are dropped. -- rjbs, 2007-03-21
       content_type  => 'multipart/report; report-type="feedback-report"',
     },
-    header => $arg{header} || [],
     parts  => [ $description_part, $report_part, $original_part ],
+
+    header     => $arg{header}     || [],
+    header_str => $arg{header_str} || [],
   );
 
   $class->new($report);
