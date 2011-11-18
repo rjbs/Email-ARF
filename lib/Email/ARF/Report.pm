@@ -121,7 +121,7 @@ C<create> constructor.
 
 Default values are provided for the following fields:
 
-  version       - 0.1
+  version       - 1
   user-agent    - Email::ARF::Report/$VERSION
   feedback-type - other
 
@@ -168,7 +168,7 @@ sub create {
   }
 
   unless (defined $fields->header('version')) {
-    $fields->header_set('Version', "0.1");
+    $fields->header_set('Version', "1");
   }
 
   unless (defined $fields->header('Feedback-Type')) {
