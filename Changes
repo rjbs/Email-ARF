@@ -2,6 +2,11 @@ Revision history for Email::ARF::Report
 
 {{$NEXT}}
 
+0.007     2013-07-25 17:20:14 America/Los_Angeles
+          document that this is for RFC-standard ARF
+
+          update issue tracker
+
 0.006     2011-03-24 23:39:47 America/New_York
           document means to add extra headers to report
 
