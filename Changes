@@ -2,6 +2,11 @@ Revision history for Email::ARF::Report
 
 {{$NEXT}}
 
+0.008     2013-07-29 21:54:04 America/New_York
+          really document that this is for RFC-standard ARF
+
+          remove link to PEP
+
 0.007     2013-07-25 17:20:14 America/Los_Angeles
           document that this is for RFC-standard ARF
 
