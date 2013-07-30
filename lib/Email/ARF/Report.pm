@@ -284,14 +284,6 @@ sub arf_version   { $_[0]->field('Version');       }
 
 L<http://www.mipassoc.org/arf/>
 
-L<http://www.shaftek.org/publications/drafts/abuse-report/draft-shafranovich-feedback-report-01.txt>
-
-=head1 PERL EMAIL PROJECT
-
-This module is maintained by the Perl Email Project
-
-L<http://emailproject.perl.org/wiki/Email::ARF::Report>
-
-=cut
+L<RFC 5965|http://tools.ietf.org/html/rfc5965>
 
 1;
