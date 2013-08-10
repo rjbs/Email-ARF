@@ -1,8 +1,8 @@
-#!perl -T
+#!perl
 use strict;
 use warnings;
 
-use Test::More tests => 85;
+use Test::More tests => 10;
 
 BEGIN { use_ok('Email::ARF::Report'); }
 
@@ -75,34 +75,36 @@ my %data = (
 
 for my $code (keys %code) {
   while (my ($file, $attr) = each %data) {
-    my $desc = "$file: $code";
+    subtest "$file: $code" => sub {
+      plan tests => 8 + keys(%$attr);
 
-    my $report = $code{$code}->($file);
-    isa_ok($report, 'Email::ARF::Report');
+      my $report = $code{$code}->($file);
+      isa_ok($report, 'Email::ARF::Report');
 
-    is(
-      $report->feedback_type,
-      $attr->{'feedback-type'},
-      "$desc: feedback_type"
-    );
+      is(
+        $report->feedback_type,
+        $attr->{'feedback-type'},
+        "feedback_type"
+      );
 
-    is($report->user_agent,  'SomeGenerator/1.0', "$desc: user_agent");
-    is($report->arf_version, '0.1',               "$desc: arf_version");
+      is($report->user_agent,  'SomeGenerator/1.0', "user_agent");
+      is($report->arf_version, '0.1',               "arf_version");
 
-    for my $field (keys %$attr) {
-      is($report->field($field), $attr->{$field}, "$desc: $field");
-    }
+      for my $field (keys %$attr) {
+        is($report->field($field), $attr->{$field}, "$field");
+      }
 
-    is(
-      $report->original_email->header('subject'),
-      'Earn money',
-      "$desc: we can get headers from the original message via the report",
-    );
+      is(
+        $report->original_email->header('subject'),
+        'Earn money',
+        "we can get headers from the original message via the report",
+      );
 
-    like(
-      $report->description,
-      qr/\QIP 10.67.41.167\E/,
-      "$desc: we seem to be able to get the report description",
-    );
+      like(
+        $report->description,
+        qr/\QIP 10.67.41.167\E/,
+        "we seem to be able to get the report description",
+      );
+    };
   }
 }
