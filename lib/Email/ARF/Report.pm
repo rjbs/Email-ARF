@@ -83,20 +83,22 @@ sub new {
     original_part    => $original_part,
   } => $class;
 
-  $self->{fields} = $self->_email_from_body($report_part)->header_obj;
+  $self->{fields} = $self->_email_from_body($report_part, 1)->header_obj;
   $self->{original_email} = $self->_email_from_body($original_part);
 
   return $self;
 }
 
 sub _email_from_body {
-  my ($self, $src_email) = @_;
+  my ($self, $src_email, $append_nl) = @_;
 
   my $src_email_body = $src_email->body;
 
   $src_email_body =~ s/\A(\x0d|\x0a)+//g;
 
-  my $email = Email::MIME->new($src_email_body);
+  my $email = Email::MIME->new(
+    $append_nl ? "$src_email_body\n" : $src_email_body
+  );
 }
 
 =method create
