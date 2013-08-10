@@ -2,6 +2,9 @@ Revision history for Email::ARF::Report
 
 {{$NEXT}}
 
+0.009     2013-08-09 23:08:01 America/New_York
+          ensure compatibility with Email::MIME 1.923
+
 0.008     2013-07-29 21:54:04 America/New_York
           really document that this is for RFC-standard ARF
 
