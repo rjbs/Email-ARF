@@ -5,7 +5,7 @@ package Email::ARF::Report;
 
 use Carp ();
 use Email::MIME 1.900 (); # ->subtypes
-use Email::MIME::ContentType ();
+use Email::MIME::ContentType 1.016 (); # type/subtype
 use Scalar::Util ();
 use Params::Util qw(_INSTANCE);
 
@@ -63,8 +63,8 @@ sub new {
   my $ct = Email::MIME::ContentType::parse_content_type($ct_header);
 
   Carp::croak "non-ARF content type '$ct_header' on ARF report source"
-    unless $ct->{discrete}  eq 'multipart'
-    and    $ct->{composite} eq 'report'
+    unless $ct->{type}  eq 'multipart'
+    and    $ct->{subtype} eq 'report'
     and    $ct->{attributes}{'report-type'} eq 'feedback-report';
 
   Carp::croak "too few subparts for ARF report" unless $mime->subparts >= 3;
@@ -74,8 +74,8 @@ sub new {
   my $report_header = $report_part->content_type;
   my $report_ct = Email::MIME::ContentType::parse_content_type($report_header);
   Carp::croak "bad content type '$report_header' for machine-readable section"
-    unless $report_ct->{discrete}  eq 'message'
-    and    $report_ct->{composite} eq 'feedback-report';
+    unless $report_ct->{type}  eq 'message'
+    and    $report_ct->{subtype} eq 'feedback-report';
 
   my $self = bless {
     mime             => $mime,
