@@ -186,8 +186,6 @@ sub create {
 
   my $report = Email::MIME->create(
     attributes => {
-      # It is so asinine that I need to do this!  Only certain blessed
-      # attributes are heeded, here.  The rest are dropped. -- rjbs, 2007-03-21
       content_type  => 'multipart/report',
       'report-type' => 'feedback-report',
     },
