@@ -4,7 +4,7 @@ package Email::ARF::Report;
 # ABSTRACT: interpret Abuse Reporting Format (ARF) messages
 
 use Carp ();
-use Email::MIME 1.900 (); # ->subtypes
+use Email::MIME 1.929 (); # content-type attributes
 use Email::MIME::ContentType 1.016 (); # type/subtype
 use Scalar::Util ();
 use Params::Util qw(_INSTANCE);
@@ -188,7 +188,8 @@ sub create {
     attributes => {
       # It is so asinine that I need to do this!  Only certain blessed
       # attributes are heeded, here.  The rest are dropped. -- rjbs, 2007-03-21
-      content_type  => 'multipart/report; report-type="feedback-report"',
+      content_type  => 'multipart/report',
+      'report-type' => 'feedback-report',
     },
     parts  => [ $description_part, $report_part, $original_part ],
 
