@@ -1,6 +1,7 @@
 Revision history for Email::ARF::Report
 
 {{$NEXT}}
+        - updates packaging metadata only
 
 0.011     2021-06-20 15:45:57-04:00 America/New_York
         - fix things to pass with recent Email-MIME-ContentType (thanks, Chase
